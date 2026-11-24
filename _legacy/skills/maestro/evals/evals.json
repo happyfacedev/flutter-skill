@@ -1,0 +1,33 @@
+{
+  "skill_name": "maestro",
+  "evals": [
+    {
+      "id": 0,
+      "name": "flutter-login-flow",
+      "prompt": "I need to write a Maestro flow for my Flutter iOS app. The app's bundle id is com.myco.notes. The login screen has an email field wrapped in Semantics(identifier: 'login_email'), a password field wrapped in Semantics(identifier: 'login_password'), and a Sign In FilledButton wrapped in Semantics(identifier: 'login_submit'). After logging in successfully with user@test.com / correct-horse, the app navigates to the home screen which shows an AppBar titled 'Inbox'. Write the complete flow file and explain why each step is shaped the way it is. Save the flow to /tmp/maestro-eval-login.yaml.",
+      "expected": "Working flow that: sets appId, launchApp with clearState, taps email via id, inputs text, pressKey Enter (NOT hideKeyboard) to dismiss Flutter iOS keyboard, taps password via id, inputs text, pressKey Enter, taps submit via id, uses extendedWaitUntil for async result, asserts 'Inbox'. Explanation should mention Flutter iOS keyboard issue.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "debug-listtile-assertion-failure",
+      "prompt": "My Maestro flow just failed with: `Assertion 'Grocery list' is visible failed. Element not visible`. But when I take a screenshot, 'Grocery list' IS clearly on the screen — it's the title of the first item in a list of notes. The app is Flutter. I'm running on iOS simulator. The note tile is a ListTile with title: Text('Grocery list') and subtitle: Text('Milk, eggs, bread'). What's going on and what's the fix? Give me a concrete YAML fix I can paste.",
+      "expected": "Diagnosis: ListTile merges title+subtitle into multi-line accessibilityText 'Grocery list\\nMilk, eggs, bread'. text:/shorthand is full-match regex that can't match the multi-line string. Fix: use DOTALL `(?s).*Grocery list.*` or select by id:.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "multi-step-wizard-with-back-nav",
+      "prompt": "Write a Maestro flow for a Flutter iOS app (bundle id dev.myco.shop) that walks through a 3-step checkout wizard: (1) on /wizard screen, tap a card with Semantics(identifier: 'option_subscription'); (2) the next screen asks to pick a plan — there are two RadioListTile options wrapped in Semantics(identifier: 'plan_monthly') and Semantics(identifier: 'plan_yearly'), pick yearly, then tap the continue button Semantics(identifier: 'plan_next'); (3) the last screen has a payment field Semantics(identifier: 'pay_card') and a submit button Semantics(identifier: 'pay_submit'). Enter 4242424242424242 as the card and submit. On success an 'All set!' Text appears. The flow must also test back navigation: after reaching step 3, step back twice via the AppBar chevron and verify each prior screen shows its expected text (the plan picker's title is 'Pick a plan' and the wizard start has a title 'Are you sure?'). Save to /tmp/maestro-eval-wizard.yaml.",
+      "expected": "Multi-step flow using id: selectors for each step. Dismisses keyboard with pressKey Enter. Uses `tapOn: \"Back\"` for the back navigation (NOT `- back` command). Escapes '?' in 'Are you sure?' as `Are you sure\\\\?`. Ends with assertVisible 'All set!'.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "semantics-iconbutton-not-found",
+      "prompt": "I have this in my Flutter app:\n\n```dart\nSemantics(\n  identifier: 'note_delete',\n  child: IconButton(\n    icon: const Icon(Icons.delete),\n    tooltip: 'Delete',\n    onPressed: _delete,\n  ),\n)\n```\n\nBut my Maestro flow `- tapOn: id: \"note_delete\"` fails with 'Element not found'. If I dump `maestro hierarchy`, I see a node with accessibilityText 'Delete' where I expect my button to be, but no resource-id. What's wrong and how do I fix it in the app? Give me the fixed Dart snippet.",
+      "expected": "Explain that IconButton has its own semantics node (from the tooltip) that absorbs the outer Semantics identifier. Fix: add `container: true` to the Semantics wrapper so it becomes a distinct node. Show the corrected Dart code.",
+      "files": []
+    }
+  ]
+}

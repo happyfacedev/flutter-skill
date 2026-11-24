@@ -1,0 +1,173 @@
+<!--
+  Option sheet — the visual-proposal scaffold for /design-style.
+  One sheet per decision, saved at design/options/<NN>-<decision>.html.
+  Before overwriting with a new round, snapshot the old file to
+  design/options/history/<NN>-<decision>-r<round>.html — the user must be
+  able to say "go back to round 2's B".
+
+  Rules this template encodes (violating them invalidates the comparison):
+  - ONE variable: every option renders the SAME mini screen, pixel-identical
+    except for this decision's values.
+  - TRUE SCALE: screens are a fixed 390px wide at 1:1 CSS px — never shrunk
+    to fit. The row scrolls horizontally if options don't fit. Scaled-down
+    frames lie about type size, density, and tap targets.
+  - REAL CONTENT: REPLACE the scaffold text below with realistic content from
+    the user's OWN domain — never lorem ipsum, never this template's example
+    strings (placeholder text turns copy into decoration and hides
+    spacing/hierarchy truths). Identical across options. Include its hardest
+    case: the longest realistic string, a sparse row, and the app's most
+    demanding element (its chart / HUD / dense list from the §0 inventory).
+  - NO RECOMMENDATION SHOWN: the sheet is neutral. The recommendation is
+    delivered in chat AFTER the user's gut reaction (an upfront badge is a
+    measured anchor). Re-renders after the reveal may mark the current
+    front-runner if the user asks.
+  - ORDER ROTATED: vary which option is leftmost between rounds/decisions —
+    first position is preferred by up to ~30% regardless of merit. Note in
+    the header that order is arbitrary.
+  - MID-FIDELITY: realistic enough to react to, visibly provisional (the
+    "working options · round N" header) — a shippable-looking mock invites
+    button-level feedback and premature closure.
+  - 2–3 options, never more; every option a defensible direction (no decoys).
+  - GATED BEFORE RENDER: every option here has already cleared the self-critique
+    gate (not the default you'd produce for any app in this category) and the
+    project's §0 forbidden-moves list. Trip either and it never becomes a panel.
+
+  Per-decision adaptations:
+  - Color: same screen per candidate hue + a dark strip under each; add the
+    on-screen color caveat line (displays differ — judge exact hue on device).
+  - Typography: load real fonts (Google Fonts link or local; local file, CDN
+    is fine here); render the actual scale — page title / section / body /
+    caption — at true size.
+  - Density / spacing: same list screen per density; include the longest
+    realistic row and a sparse row.
+  - Shape: same card + button + field per radius personality.
+  - Icons: the same 6 icons (home, search, settings, back, add, error) from
+    each candidate set at the workhorse size. Use each set's OFFICIAL webfont
+    or CDN <link> (Material Symbols, Phosphor ship webfonts); for SVG-only
+    sets, paste real path data from the installed package or its repo —
+    NEVER hand-write glyph paths from memory, they will be wrong and
+    invalidate the comparison.
+  - Elevation: cards at each level over the app background.
+  - Motion: replayable CSS animations (the .replay pattern below) running
+    each option's real durations/curves.
+  - Components (Phase 5): one option per variant proposal; grid showing the
+    full state row (enabled / pressed / disabled / loading / error …).
+  - Type, tap-target, or density decisions: keep the footer's open-on-phone
+    line — a desktop preview is not trustworthy for these.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NN · Decision name — working options</title>
+<!-- Typography sheets: load candidate fonts here, e.g.
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+-->
+<style>
+  :root { --ink:#1a1d24; --paper:#f4f5f7; --line:#e2e4e9; --muted:#6b7280; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font:15px/1.5 -apple-system,"Segoe UI",Roboto,sans-serif;
+         color:var(--ink); background:var(--paper); padding:32px 24px 64px; }
+  header.sheet { max-width:1280px; margin:0 auto 24px; }
+  header.sheet .round { color:var(--muted); font-size:12px; font-weight:700;
+                        letter-spacing:.08em; text-transform:uppercase; }
+  header.sheet h1 { font-size:22px; margin:4px 0 6px; }
+  header.sheet p  { color:var(--muted); max-width:70ch; }
+
+  /* Options row — horizontal scroll, NEVER shrink the screens to fit */
+  .options { max-width:1280px; margin:0 auto; display:flex; gap:24px;
+             overflow-x:auto; padding-bottom:12px; align-items:flex-start; }
+  .panel { flex:0 0 auto; width:438px; background:#fff;
+           border:1px solid var(--line); border-radius:16px; padding:20px;
+           display:flex; flex-direction:column; gap:12px; }
+  .panel > .label b { font-size:17px; }
+  .why { color:var(--muted); font-size:13px; }
+
+  /* Mini phone screen — FIXED 390px, 1:1 CSS px, height content-driven */
+  .screen { width:390px; border:1px solid var(--line); border-radius:22px;
+            overflow:hidden; background:#fff; }
+  .screen .bar    { padding:14px 16px 10px; font-weight:600; }
+  .screen .body   { padding:8px 16px; }
+  .screen .card   { border-radius:14px; padding:14px; margin-bottom:10px; }
+  .screen .cta    { border:0; width:100%; padding:13px; border-radius:12px;
+                    font-weight:600; font-size:15px; }
+  .screen .footer { padding:12px 16px 16px; }
+
+  /* Dark strip (color sheets): shorter second screen with dark values */
+  .screen.dark { margin-top:12px; }
+
+  .replay { border:1px solid var(--line); background:#fff; border-radius:8px;
+            padding:6px 12px; cursor:pointer; font-size:13px; }
+
+  footer.sheet { max-width:1280px; margin:28px auto 0; color:var(--muted);
+                 font-size:13px; border-top:1px solid var(--line);
+                 padding-top:14px; }
+</style>
+</head>
+<body>
+
+<header class="sheet">
+  <div class="round">Working options · Round N · order is arbitrary</div>
+  <h1>NN · Decision name</h1>
+  <p>One sentence framing the question and what to react to. Each option is the same screen with identical real content — only this decision's values change.</p>
+</header>
+
+<div class="options">
+
+  <section class="panel">
+    <div class="label"><b>A — Option name</b></div>
+    <p class="why">One neutral line: what this option is (its discovery source, not a sales pitch).</p>
+    <div class="screen">
+      <div class="bar">Screen title</div>
+      <div class="body">
+        <!--
+          REPLACE with realistic content from the user's OWN domain — never
+          these placeholders, never lorem ipsum. Include its hardest case:
+          the longest realistic string, a sparse row, and the app's most
+          demanding element. Keep it identical across every option on the sheet.
+        -->
+        <div class="card" style="background:#eef;">
+          <b>Primary item — the longest realistic label this screen must hold</b><br>
+          supporting metadata · secondary metadata
+        </div>
+        <div class="card" style="background:#eef;">
+          <b>Sparse row</b><br>
+          one field
+        </div>
+      </div>
+      <div class="footer"><button class="cta" style="background:#446;color:#fff;">Primary action</button></div>
+    </div>
+    <!-- Color sheets: add <div class="screen dark">…</div> with dark values -->
+  </section>
+
+  <section class="panel">
+    <div class="label"><b>B — Option name</b></div>
+    <p class="why">One neutral line.</p>
+    <div class="screen">
+      <!-- same screen, same content, option B values -->
+    </div>
+  </section>
+
+  <!-- Optional third panel — only if it survives the divergence check -->
+
+</div>
+
+<footer class="sheet">
+  React in chat with your gut first: which one, and the first word that comes to mind. Then we dig into why. “B, but warmer” re-renders in place (previous rounds are kept in design/options/history/).
+  <!-- Type / density / tap-target sheets: keep this line -->
+  <br>Two viewings: pick side-by-side on desktop; then open on your phone (one option fills the screen at a time) to judge real sizes and density before we lock.
+  <!-- Color sheets: keep this line -->
+  <br>Screens differ; judge exact hue on the device you'll use most.
+</footer>
+
+<!-- Motion sheets only:
+<script>
+  document.querySelectorAll('.replay').forEach(btn => btn.addEventListener('click', () => {
+    const el = document.querySelector(btn.dataset.target);
+    el.style.animation = 'none'; void el.offsetWidth; el.style.animation = '';
+  }));
+</script>
+-->
+</body>
+</html>

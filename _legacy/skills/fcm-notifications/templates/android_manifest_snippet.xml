@@ -1,0 +1,59 @@
+<!--
+  AndroidManifest.xml additions for FCM. Merge into android/app/src/main/AndroidManifest.xml.
+
+  Do NOT manually declare <service android:name="...FirebaseMessagingService"/> —
+  the firebase_messaging plugin auto-registers it. A manual declaration
+  causes duplicate handling.
+
+  Do NOT add USE_EXACT_ALARM / SCHEDULE_EXACT_ALARM here — those are for
+  scheduled local notifications (out of scope; see SKILL.md §2.2).
+
+  The default_notification_channel_id MUST match the constant used in
+  FcmTransportImpl (`notifications_v1` in the template). If you bump the
+  channel version per Rule 8, bump it here too.
+
+  default_notification_icon: the small white-silhouette icon that appears
+  in the status bar. Without it, Android renders a grey square in
+  production builds — the FCM debug build is misleading because it falls
+  back to ic_launcher.
+
+  PROJECT SUBSTITUTIONS:
+    <package>                 your app id
+    @drawable/ic_notification  your white-silhouette icon (must exist)
+    @color/notification_accent your accent color resource
+-->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="<package>">
+
+    <!-- Android 13+ runtime permission. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application>
+
+        <!--
+          MUST equal the AndroidNotificationChannel id you create at init
+          (notifications_v1 in the template). Bump together if you change
+          importance (Rule 8).
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="notifications_v1" />
+
+        <!--
+          Status-bar icon for notifications delivered while the app is
+          backgrounded/terminated and rendered by the system. Must be a
+          white-on-transparent silhouette per Material guidelines.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification" />
+
+        <!-- Tint applied to the silhouette icon. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/notification_accent" />
+
+    </application>
+
+</manifest>
