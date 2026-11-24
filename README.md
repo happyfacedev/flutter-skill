@@ -2,27 +2,28 @@
 
 All Flutter conventions, rules, and pattern skills in one repo, registered at user level.
 
-**How it routes:** only the `flutter-skill` router carries a real description (auto-triggers on Flutter coding tasks). Pattern skills under `skills/` are registered too — so they're invocable with the Skill tool — but their descriptions are deliberate stubs, so they never fire on their own. The router's routing table is the single authority for when to invoke each pattern.
+**How it routes:** only the `flutter-skill` router is loaded by the agent (it auto-triggers on Flutter coding tasks). Patterns are plain files inside its folder, not registered skills, so they cost no context until the router's table sends the agent to read one. The table is the single authority for when to read each pattern.
 
 ## Layout
 
 ```
 flutter-skill/
 ├── .claude-plugin/plugin.json  # the `flutter` plugin manifest (no version: installs follow commits)
-├── SKILL.md      # router: working principles, core rules (architecture/coding/UI), pattern routing table
-├── skills/       # migrated pattern skills (stub descriptions; routed by SKILL.md)
-│                 #   + flutter-skill/SKILL.md, the router itself (the root SKILL.md links to it)
-│                 #   + user-run commands: design-style, design-codify, flutter-skill-migrate
+├── skills/
+│   ├── flutter-skill/
+│   │   ├── SKILL.md    # router: working principles, core rules (architecture/coding/UI), pattern routing table
+│   │   └── patterns/   # <name>/PATTERN.md + its templates and references
+│   └── design-style, design-codify, flutter-skill-migrate   # user-run commands
 ├── _legacy/      # not authoritative:
 │   ├── skills/     #   migration queue — pre-revamp patterns not yet revamped
-│   ├── migrated/   #   pre-revamp snapshots of patterns that shipped to skills/
+│   ├── migrated/   #   pre-revamp snapshots of patterns that shipped
 │   └── retired/    #   patterns killed or merged away (refresh-bus, page/widget-creation)
-└── setup.sh      # symlinks router + patterns into ~/.claude/skills (idempotent, rerun after adding a pattern)
+└── setup.sh      # symlinks skills/* into ~/.claude/skills (idempotent)
 ```
 
 ## Setup
 
-**As a plugin (recommended):** the kit is the `flutter` plugin in the happyface marketplace. Plugin skills are namespaced: the router is `flutter:flutter-skill`, a pattern is `flutter:cubit-creation`.
+**As a plugin (recommended):** the kit is the `flutter` plugin in the happyface marketplace. Plugin skills are namespaced: the router is `flutter:flutter-skill`.
 
 ```text
 /plugin marketplace add happyfacedev/happyface-plugins
@@ -44,6 +45,6 @@ Recommended per Flutter project: one line in `CLAUDE.md` — "Flutter project �
 ## Migrating a pattern (from `_legacy/skills/`)
 
 1. Revamp body: why-framed critical rules, checklist, <500 lines; templates/reference only as needed.
-2. Replace its description with the stub: `Internal flutter-skill pattern — invoked via the flutter-skill router, not from this description. (<3-word hint>)`
-3. Land the revamp at `skills/<name>/`; move the pre-revamp original to `_legacy/migrated/<name>/`.
-4. Add its row to the router's routing table, rerun `setup.sh`.
+2. Remove its frontmatter and name the file `PATTERN.md`.
+3. Land the revamp at `skills/flutter-skill/patterns/<name>/`; move the pre-revamp original to `_legacy/migrated/<name>/`.
+4. Add its row to the router's routing table.

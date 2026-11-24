@@ -1,26 +1,20 @@
 #!/bin/bash
-# Register the flutter-skill router + all migrated patterns at user level.
-# Idempotent — rerun after adding a pattern to skills/.
+# Register the flutter-skill router + the user-run commands at user level.
+# Patterns live inside the router's folder and are not registered.
+# Idempotent — rerun after adding a skill to skills/.
 set -euo pipefail
 
 KIT="$(cd "$(dirname "$0")" && pwd)"
 DEST="$HOME/.claude/skills"
 mkdir -p "$DEST"
 
-ln -sfn "$KIT" "$DEST/flutter-skill"
-echo "linked flutter-skill"
+for s in "$KIT"/skills/*/; do
+  name="$(basename "$s")"
+  ln -sfn "${s%/}" "$DEST/$name"
+  echo "linked $name"
+done
 
-if [ -d "$KIT/skills" ]; then
-  for s in "$KIT"/skills/*/; do
-    name="$(basename "$s")"
-    # skills/flutter-skill is the router, already linked above through the root.
-    [ "$name" = flutter-skill ] && continue
-    ln -sfn "${s%/}" "$DEST/$name"
-    echo "linked $name"
-  done
-fi
-
-# Prune user-level symlinks pointing at kit patterns that no longer exist
+# Prune user-level symlinks pointing at kit skills that no longer exist
 for link in "$DEST"/*; do
   [ -L "$link" ] || continue
   target="$(readlink "$link")"

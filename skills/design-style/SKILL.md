@@ -1,6 +1,7 @@
 ---
 name: design-style
 description: Manual command — run ONLY when the user explicitly invokes /design-style. Never auto-trigger. (Design-direction collaborator — decide the app's complete visual language with the user.)
+disable-model-invocation: true
 ---
 
 # Design Style — the direction collaborator

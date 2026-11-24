@@ -1,6 +1,7 @@
 ---
 name: design-codify
 description: Manual command — run ONLY when the user explicitly invokes /design-codify. Never auto-trigger. (Convert a locked design spec into Flutter theme, token, and core-widget files.)
+disable-model-invocation: true
 ---
 
 # Design Codify — spec → Flutter

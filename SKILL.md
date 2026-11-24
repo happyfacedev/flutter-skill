@@ -1,1 +1,0 @@
-skills/flutter-skill/SKILL.md

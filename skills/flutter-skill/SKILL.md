@@ -15,9 +15,9 @@ Project-specific facts (package name, directory structure, feature list, build c
 - **Rules and patterns first — project files as fallback.** Resolve tasks from this file's rules, the routed patterns, and context already in the conversation. Only if information required to complete the task is still missing — an integration point, an existing symbol or widget to reuse, a convention nothing here covers — Read/Search the specific project files that fill that gap. Keep fallback reads purposeful — a direct Read of a known path beats a Grep sweep, and don't scan the project up front by default — but when completing the task genuinely requires understanding an unfamiliar area, explore it.
 - **Rules outrank neighboring code.** When a rule or pattern prescribes a convention and nearby files do it differently, follow the rule — legacy files usually predate it, and matching them keeps the codebase from ever converging.
 - **Reuse before creating.** Before writing any new button, field, dialog, or common UI element, check the project's existing inventory — reinventing an existing widget is the most common kind of drift. If the project provides a `/project-facts` skill, invoke it first: it injects the live design-token roles and the full reuse inventory (widget/util signatures with docs), replacing every token or inventory grep. Otherwise `/ui` covers where to look.
-- **Plans must carry their rules.** Rules and patterns are matched against user requests, not plan steps — an agent executing a plan never re-routes. Every plan step that creates a component must embed "→ Invoke /pattern-name before writing code" and surface that pattern's critical rules. Writing the plan itself → `/planning`.
+- **Plans must carry their rules.** Rules and patterns are matched against user requests, not plan steps — an agent executing a plan never re-routes. Every plan step that creates a component must embed "→ Invoke /pattern-name (flutter-skill) before writing code" and surface that pattern's critical rules. Writing the plan itself → `/planning`.
 - **Read files just before editing them, not up front.** Sequence: read rules/patterns → write new files → read integration files → edit them. Early reads go stale by the time you edit, causing failed edits and re-reads.
-- **Don't re-read what you already have.** After the Skill tool loads a pattern, don't separately read its SKILL.md; read only the templates for components you will actually create; don't re-read a file whose content hasn't changed since your last read.
+- **Don't re-read what you already have.** Read a pattern's PATTERN.md once per session; read only the templates for components you will actually create; don't re-read a file whose content hasn't changed since your last read.
 
 ## Core rules
 
@@ -50,11 +50,9 @@ Project-specific facts (package name, directory structure, feature list, build c
 
 ## Patterns
 
-Patterns are registered skills with deliberately blank descriptions — **this table is their only routing authority**. Invoke the matching pattern before writing code for its component type.
+Patterns are files, not skills: `/<pattern>` anywhere in this kit (and "invoke `/<pattern>`" in a plan) means **read `patterns/<pattern>/PATTERN.md` in the directory that holds this file, then follow it**. Don't call the Skill tool with a pattern name — a same-named project skill is a different thing. A pattern's own links are relative to its folder. **This table is their only routing authority**: read the matching pattern before writing code for its component type.
 
-Migrating one by one — the table grows as each pattern lands under `skills/`:
-
-| Task involves... | Invoke first |
+| Task involves... | Read first |
 |------------------|--------------|
 | Planning, scoping, or breaking down a multi-layer change | `/planning` |
 | NEW standard feature — list (+ detail) from one Supabase table or RPC, optional delete/fixed-value actions | `/feature-scaffold` — check its CAN table first; doesn't fit → the normal patterns below |
