@@ -13,7 +13,7 @@ echo "linked flutter-skill"
 if [ -d "$KIT/skills" ]; then
   for s in "$KIT"/skills/*/; do
     name="$(basename "$s")"
-    # skills/flutter-skill only points the plugin at the root router, linked above.
+    # skills/flutter-skill is the router, already linked above through the root.
     [ "$name" = flutter-skill ] && continue
     ln -sfn "${s%/}" "$DEST/$name"
     echo "linked $name"

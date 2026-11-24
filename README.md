@@ -11,7 +11,7 @@ flutter-skill/
 ├── .claude-plugin/plugin.json  # the `flutter` plugin manifest (no version: installs follow commits)
 ├── SKILL.md      # router: working principles, core rules (architecture/coding/UI), pattern routing table
 ├── skills/       # migrated pattern skills (stub descriptions; routed by SKILL.md)
-│                 #   + flutter-skill/SKILL.md, a link to the router so the plugin loads it
+│                 #   + flutter-skill/SKILL.md, the router itself (the root SKILL.md links to it)
 │                 #   + user-run commands: design-style, design-codify, flutter-skill-migrate
 ├── _legacy/      # not authoritative:
 │   ├── skills/     #   migration queue — pre-revamp patterns not yet revamped
